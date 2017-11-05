@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import { app, base } from '../base'
+import { app } from '../base'
 import Header from './Header'
 import Login from './Login'
 import Logout from './Logout'
@@ -9,13 +9,15 @@ import Dashboard from './Dashboard'
 import CreateSurvey from './CreateSurvey'
 import SurveyForm from './SurveyForm'
 import Survey from './Survey'
+import Report from './Report'
 
 class App extends Component {
 
   state = {
     authenticated: false,
     loading: true,
-    surveyList: []
+    surveyList: [],
+    surveyResult: []
   }
 
   componentWillMount() {
@@ -34,29 +36,13 @@ class App extends Component {
         })
       }
     })
-
-    this.ref = base.syncState(`surveys`,{
-      context: this,
-      state: 'surveyList',
-      asArray: true
-    })
-
-    const localStorageRef = localStorage.getItem(`surveys`)
-
-        if (localStorageRef) {
-          this.setState({
-            surveyList: JSON.parse(localStorageRef)
-          })
-        }
   }
 
   componentWillUnmount() {
     this.removeAuthListener()
-    base.removeBinding(this.ref)
   }
 
   componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem(`surveys`, JSON.stringify(nextState.surveyList))
   }
 
   createSurvey = (survey) => {
@@ -68,6 +54,13 @@ class App extends Component {
   handler = (newList) => {
     const stateCopy = { ...this.state }
     stateCopy.surveyList = newList
+    this.setState(stateCopy)
+  }
+
+  surveyResultHandler = (newObj) => {
+    console.log("",newObj)
+    const stateCopy = { ...this.state }
+    stateCopy.surveyResult.push(newObj)
     this.setState(stateCopy)
   }
 
@@ -85,10 +78,11 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Header authenticated={this.state.authenticated} />
-            <Route exact path="/" component={Survey} />
-            <Route exact path="/dashboard" render={(props) => (
+            <Route exact path="/" render={(props) => (
               <Survey
-                surveyList={this.state.surveyList} {...props}
+                surveyResult={this.surveyResultHandler}
+                surveyList={this.state.surveyList}
+                {...props}
               />
             )}/>
             <Route exact path="/login" component={Login} />
@@ -111,6 +105,12 @@ class App extends Component {
               <SurveyForm
                 authenticated={this.state.authenticated}
                 createSurvey={this.createSurvey}
+                {...props}
+              />
+            )}/>
+            <Route exact path="/report/:surveyId" render={(props) => (
+              <Report
+                authenticated={this.state.authenticated}
                 {...props}
               />
             )}/>

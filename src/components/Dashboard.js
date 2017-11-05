@@ -1,67 +1,185 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { base } from '../base'
 
 class Dashboard extends Component {
+  state = {
+    surveysFromDB: [],
+    reportAvailable: []
+  }
 
-  onDeleteHandler = (key) => {
-    const newList = this.props.surveyList.filter(survey => {
-      if (survey[0].key === key)
-        console.log("find")
-      return survey[0].key !== key
-    })
-    this.props.deleteSurvey(newList)
+  componentDidMount() {
+    base
+      .fetch(`surveyLists`, {
+        context: this,
+        asArray: true
+      })
+      .then(data => {
+        this.setState({ ...this.state, surveysFromDB: data.reverse() })
+        data.forEach(survey => {
+          base
+            .fetch(`surveyResults`, {
+              context: this,
+              asArray: true
+            })
+            .then(data => {
+              if(data.length > 0) {
+                console.log(data[0].key)
+                const copyState = { ...this.state }
+                copyState.reportAvailable[data[0].key] = true
+                this.setState(copyState)
+              }
+            })
+        })
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+  componentWIllUpdate() {
+    console.log('componentWIllUpdate')
+  }
+  componentDidUpdate() {}
+
+  onDeleteHandler = key => {
+    base
+      .remove(`surveyLists/${key}`)
+      .then(() => {
+        const copyState = { ...this.state }
+        const ret = copyState.surveysFromDB.filter(survey => {
+          return survey.key !== key
+        })
+        ret.isLoding = true
+        console.log('ret', ret)
+        this.setState(ret)
+        this.props.deleteSurvey(ret)
+
+        setTimeout(() => {
+          window.location.reload()
+        }, 300)
+      })
+      .catch(error => {})
   }
 
   onActiveHandler = (key, active) => {
-    const newList = this.props.surveyList.map(survey => {
-      if (survey[0].key === key) {
-        survey[0].active = !survey[0].active
+    this.state.surveysFromDB.forEach(survey => {
+      if (survey.key !== key) {
+        base
+          .update(`surveyLists/${survey.key}/meta`, {
+            data: {
+              active: false
+            }
+          })
+          .then(() => {})
+          .catch(err => {
+            //handle error
+          })
       } else {
-        survey[0].active = false
+        if (survey.meta.active === true) {
+          base
+            .update(`surveyLists/${key}/meta`, {
+              data: {
+                active: false
+              }
+            })
+            .then(() => {
+              const copyState = { ...this.state }
+              copyState.surveysFromDB.forEach(survey => {
+                if (survey.key === key) {
+                  survey.meta.active = false
+                } else {
+                  survey.meta.active = false
+                }
+              })
+              this.setState(copyState)
+            })
+            .catch(err => {
+              //handle error
+            })
+        } else {
+          base
+            .update(`surveyLists/${key}/meta`, {
+              data: {
+                active: true
+              }
+            })
+            .then(() => {
+              const copyState = { ...this.state }
+              copyState.surveysFromDB.forEach(survey => {
+                if (survey.key === key) {
+                  survey.meta.active = true
+                } else {
+                  survey.meta.active = false
+                }
+              })
+              this.setState(copyState)
+            })
+            .catch(err => {
+              //handle error
+            })
+
+        }
       }
-      return survey
     })
-    this.props.activeHandler(newList)
   }
 
-  render () {
+  render() {
     if (!this.props.authenticated) {
-      return <div className="alert alert-danger" role="alert">You need to login</div>
+      return (
+        <div className="alert alert-danger" role="alert">
+          You need to login
+        </div>
+      )
     }
-    const { surveyList } = this.props
+
+    const surveyList = this.state.surveysFromDB
+    console.log(this.state.reportAvailable)
     return (
       <div>
         <div>
-          <Link className="btn btn-outline-info mb-4" to="/createSurvey">Create Survey</Link>
+          <Link className="btn btn-outline-info mb-4" to="/createSurvey">
+            Create Survey
+          </Link>
           <ul className="list-group">
-            { surveyList.map(survey => {
-              const { key, title, active } = survey[0]
+            {surveyList.map(survey => {
+              const key = survey.key
+              const title = survey.meta.title
+              const active = survey.meta.active
               return (
-                <li className="list-group-item d-flex justify-content-between align-items-start"
-                  key={key}>{title}
-                    <div>
-                      { active ?
-                        <button
-                          onClick={(event) => this.onActiveHandler(key, active)}
-                          className="btn btn-outline-success mr-2">
-                          Active
-                          </button>
-                        :
-                        <button
-                          onClick={(event) => this.onActiveHandler(key, active)}
-                          className="btn btn-outline-secondary mr-2">
-                          Deactive
-                        </button>
-                      }
+                <li
+                  className="list-group-item d-flex justify-content-between align-items-start p-3"
+                  key={key}
+                >
+                  {title}
+                  <div>
+                    { this.state.reportAvailable[key] &&
+                      <Link className="btn btn-outline-info mr-2" to={`/report/${key}`}>Report</Link>
+                    }
+                    {active ? (
                       <button
-                        onClick={(event) => this.onDeleteHandler(key)}
-                        className="btn btn-outline-danger">
-                        Delete
+                        onClick={event => this.onActiveHandler(key, active)}
+                        className="btn btn-outline-success mr-2"
+                      >
+                        Active
                       </button>
-                    </div>
+                    ) : (
+                      <button
+                        onClick={event => this.onActiveHandler(key, active)}
+                        className="btn btn-outline-secondary mr-2"
+                      >
+                        Deactive
+                      </button>
+                    )}
+                    <button
+                      onClick={event => this.onDeleteHandler(key)}
+                      className="btn btn-outline-danger"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </li>
               )
-            }) }
+            })}
           </ul>
         </div>
       </div>
