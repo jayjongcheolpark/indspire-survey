@@ -7,7 +7,7 @@ Indspire needs a way to automate collecting surveys from participants in their y
 # Instruction
 
 To create a survey:
-1. login as admin:
+1. Login as admin:
 	Username: admin@indspire.ca
 	Password: password
 2. Click Dashboard on top navigation bar
