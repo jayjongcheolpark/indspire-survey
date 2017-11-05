@@ -30,4 +30,20 @@ To delete a survey:
 1. Navigate to Dashboard
 2. Press Delete for the survey you wish to delete
 
+## Setup
 
+- Install Node packages. -  `yarn install`
+- Start a development server. - `yarn start`
+- Build for production. - `yarn build`
+- Run unit tests. - `yarn test`
+- Deploy to firebase - `firebase deploy`
+
+## Technologies and tools
+
+The technologies and tools used in this project are as follows.
+
+| **Name** | **Description** |
+| -------- | --------------- |
+| React | A library for client-Side components |
+| Firebase | A Free Platform to Help Develop and Grow Mobile Apps |
+| Bootstrap 4 | Most popular front-end component library |
