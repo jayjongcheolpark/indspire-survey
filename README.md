@@ -45,5 +45,5 @@ The technologies and tools used in this project are as follows.
 | **Name** | **Description** |
 | -------- | --------------- |
 | React | A library for client-Side components |
-| Firebase | A Free Platform to Help Develop and Grow Mobile Apps |
+| Firebase | A Free Realtime Database Platform |
 | Bootstrap 4 | Most popular front-end component library |
