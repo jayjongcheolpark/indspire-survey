@@ -171,7 +171,7 @@ class StudentForm extends Component {
               `surveyResults/${this.state.surveys[0].key}/${this.props
                 .studentNum}`,
               {
-                data: { ...surveyResult }
+                data: { ...surveyResult, surveyKey: this.state.surveys[0].key }
               }
             )
             .then(() => {

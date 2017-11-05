@@ -26,7 +26,11 @@ class Dashboard extends Component {
               if(data.length > 0) {
                 const copyState = { ...this.state }
                 data.forEach(elem => {
-                  copyState.reportAvailable[elem.key] = true
+                  for (let c in elem) {
+                    if(isNaN(c) === false) {
+                      copyState.reportAvailable[elem[c].surveyKey] = true
+                    }
+                  }
                 })
                 this.setState(copyState)
               }
@@ -54,12 +58,21 @@ class Dashboard extends Component {
         console.log('ret', ret)
         this.setState(ret)
         this.props.deleteSurvey(ret)
+        base
+          .remove(`surveyResults/${key}`)
+          .then(() => {
+          })
+          .catch(error => {
+            console.log(error)
+          })
 
         setTimeout(() => {
           window.location.reload()
         }, 300)
       })
-      .catch(error => {})
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   onActiveHandler = (key, active) => {

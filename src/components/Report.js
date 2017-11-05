@@ -2,24 +2,6 @@ import React, { Component } from 'react'
 import { base } from '../base'
 import {Pie} from 'react-chartjs-2';
 
-const data = {
-	labels: [
-		'Red',
-		'Yellow'
-	],
-	datasets: [{
-		data: [],
-		backgroundColor: [
-		'#FF6384',
-		'#FFCE56'
-		],
-		hoverBackgroundColor: [
-		'#FF6384',
-		'#FFCE56'
-		]
-	}]
-};
-
 const YesReport = (props) => {
   const data = {
     labels: [
@@ -128,11 +110,19 @@ class Report extends Component {
     }
 
     const numOfRecord = results.length
-    const numOfQuestion = results[0].length
+    const object = results[0]
+    let numOfQuestion = 0
+    for (let n in object) {
+      if (isNaN(n) === false)  {
+        console.log(n)
+        numOfQuestion++
+      }
+    }
+    console.log(numOfQuestion, numOfRecord)
 
     const resultContainer = []
-    resultContainer.push("")
-    for (let i = 1; i < numOfQuestion; i++) {
+
+    for (let i = 0; i < numOfQuestion; i++) {
       if (results[0][i].type === "yesno") {
         resultContainer.push({yes: 0, no: 0})
       } else if (results[0][i].type === "multiple") {
@@ -140,10 +130,12 @@ class Report extends Component {
       } else if (results[0][i].type === "sentence") {
         resultContainer.push({sentence: []})
       }
+      console.log(i)
     }
+    console.log(resultContainer)
 
     for (let j = 0; j < numOfRecord; j++) {
-      for (let i = 1; i < numOfQuestion; i++) {
+      for (let i = 0; i < numOfQuestion; i++) {
         if (results[j][i].type === "yesno") {
           if (results[j][i].value === "yes") {
             resultContainer[i].yes = resultContainer[i].yes + 1

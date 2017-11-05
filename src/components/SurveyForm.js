@@ -25,7 +25,7 @@ class Survey extends Component {
               style={{ fontFamily: 'monospace' }}
               className="input-group-addon"
             >
-              Q{this.props.idKey}
+              Q{this.props.idKey+1}
             </span>
             <input
               onChange={event => this.onchange(event, 'q')}
@@ -47,7 +47,7 @@ class Survey extends Component {
               style={{ fontFamily: 'monospace' }}
               className="input-group-addon"
             >
-              Q{this.props.idKey}
+              Q{this.props.idKey+1}
             </span>
             <input
               onChange={event => this.onchange(event, 'q')}
@@ -137,7 +137,7 @@ class Survey extends Component {
               style={{ fontFamily: 'monospace' }}
               className="input-group-addon"
             >
-              Q{this.props.idKey}
+              Q{this.props.idKey+1}
             </span>
             <input
               onChange={event => this.onchange(event, 'q')}
@@ -231,10 +231,10 @@ class SurveyForm extends Component {
     })
     const surveyKey = this.state.surveys[0].key
     const num = this.props.match.params['num']
-    for (let i = 1; i <= num; i++) {
+    for (let i = 0; i < num; i++) {
       console.log(i, (this.form[`n${i}`]))
     }
-    for (let i = 1; i <= num; i++) {
+    for (let i = 0; i < num; i++) {
       const type = this.form[`group${i}`].value
       if (type === 'yesno') {
         const q = this.form[`n${i}`].value
@@ -242,7 +242,7 @@ class SurveyForm extends Component {
         this.addSurvey(i, { type, q })
         base
         .post(`surveyLists/${surveyKey}/data/${i}`, {
-          data: { i: i, type: type, q: q }
+          data: { i: i, type: type, q: q, surveyKey }
         })
         .then(() => {
           console.log('success')
@@ -261,7 +261,7 @@ class SurveyForm extends Component {
         this.addSurvey(i, { type, q, a1, a2, a3, a4 })
         base
         .post(`surveyLists/${surveyKey}/data/${i}`, {
-          data: { i, type, q, a1, a2, a3, a4 }
+          data: { i, type, q, a1, a2, a3, a4, surveyKey }
         })
         .then(() => {
           console.log('success')
@@ -276,7 +276,7 @@ class SurveyForm extends Component {
         this.addSurvey(i, { type, q })
         base
         .post(`surveyLists/${surveyKey}/data/${i}`, {
-          data: { i, type, q }
+          data: { i, type, q, surveyKey }
         })
         .then(() => {
           console.log('success')
@@ -322,7 +322,7 @@ class SurveyForm extends Component {
     const num = this.props.match.params['num']
 
     let surveyComponents = []
-    for (let i = 1; i <= num; i++) {
+    for (let i = 0; i < num; i++) {
       surveyComponents.push(
         <Survey key={i} idKey={i} addSurvey={this.addSurvey} />
       )
