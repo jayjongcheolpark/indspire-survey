@@ -9,6 +9,7 @@ class Header extends Component {
           <Link className="btn btn-outline-primary float-right" to="/logout">Logout</Link>
           : <Link className="btn btn-outline-primary float-right" to="/login">Login</Link>
         }
+        <Link className="btn btn-outline-dark float-left mr-5" to="/dashboard">Dashboard</Link>
         <div className="clearfix"></div>
       </div>
 

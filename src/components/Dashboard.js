@@ -24,9 +24,10 @@ class Dashboard extends Component {
             })
             .then(data => {
               if(data.length > 0) {
-                console.log(data[0].key)
                 const copyState = { ...this.state }
-                copyState.reportAvailable[data[0].key] = true
+                data.forEach(elem => {
+                  copyState.reportAvailable[elem.key] = true
+                })
                 this.setState(copyState)
               }
             })
