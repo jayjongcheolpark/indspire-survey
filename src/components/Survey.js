@@ -278,11 +278,13 @@ class Survey extends Component {
   }
 
   render() {
+    console.log("hey")
     let ret = null
     ret = this.state.surveysFromDB.filter(survey => {
       return survey.meta.active === true
     })
     if (ret.length === 0) {
+    console.log("nothing")
       return <div />
     }
 
