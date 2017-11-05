@@ -161,7 +161,7 @@ class Dashboard extends Component {
               const active = survey.meta.active
               return (
                 <li
-                  className="list-group-item d-flex justify-content-between align-items-start p-3"
+                  className="list-group-item d-flex justify-content-between align-items-start p-3 display-5"
                   key={key}
                 >
                   {title}

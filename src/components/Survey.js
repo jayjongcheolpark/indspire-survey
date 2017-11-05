@@ -299,7 +299,7 @@ class Survey extends Component {
     return (
       <div>
         <div className="small">Survey Title</div>
-        <h2 className="mb-5">{ret[0].meta.title}</h2>
+        <h2 className="mb-5 display-5">{ret[0].meta.title}</h2>
         <div className="d-flex justify-content-center mt-5">
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
