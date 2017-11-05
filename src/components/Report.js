@@ -181,7 +181,7 @@ class Report extends Component {
       }
     }
     return (
-      <li className="list-group">
+      <li className="list-group mb-5">
       { renderReport.length > 0 && renderReport }
 
       </li>
