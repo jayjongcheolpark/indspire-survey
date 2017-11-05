@@ -1,10 +1,10 @@
 
-# summary
+# Summary
 
 Indspire needs a way to automate collecting surveys from participants in their yearly conference. Currently, surveys are completed on paper, and manually typed into excel spreadsheets by Indspire staff. A reason why a third-party survey app like SurveyMonkey has not been used is that the majority of participants are minors and Indspire is concerned about storing personal information about these participants on a third-party database. What we're offering is a solution that gives Indspire a simple and user-friendly way to create surveys, allow students to fill them out online, and access the results of the surveys through an admin dashboard. We've also included an analytics dashboard which will allow Indspire staff to see aggregate results of each survey and utilize that information in making their conference experience more engaging each year. 
 
 
-# instruction
+# Instruction
 
 To create a survey:
 1. login as admin:
