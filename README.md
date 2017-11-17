@@ -5,7 +5,7 @@ Indspire needs a way to automate collecting surveys from participants in their y
 
 # Demo
 
-![Indspire-Survey-Demo](https://gfycat.com/gifs/detail/HighlevelCarefulJunebug)
+![Indspire-Survey-Demo](https://thumbs.gfycat.com/HighlevelCarefulJunebug-size_restricted.gif)
 
 # Instruction
 
